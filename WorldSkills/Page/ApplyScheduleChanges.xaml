@@ -1,0 +1,44 @@
+﻿<Window x:Class="WorldSkills.Page.ApplyScheduleChanges" WindowStyle="ToolWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WorldSkills.Page" xmlns:viewmodel="clr-namespace:WorldSkills.ViewModel" d:DataContext="{d:DesignInstance Type=viewmodel:ManageFlightSchedulesDataManager}"
+        WindowStartupLocation="CenterScreen"
+        mc:Ignorable="d"
+        Title="Apply Schedule Changes" MaxHeight="320" MaxWidth="500" MinHeight="320" MinWidth="500">
+    <Grid Height="320" Width="500">
+        <Separator Margin="-23,28,389,-59" BorderBrush="Black" BorderThickness="3" RenderTransformOrigin="0.5,0.5">
+            <Separator.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform Angle="89.87"/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </Separator.RenderTransform>
+        </Separator>
+        <Separator Margin="390,28,-24,-59" BorderBrush="Black" BorderThickness="3" RenderTransformOrigin="0.5,0.5">
+            <Separator.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform Angle="89.87"/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </Separator.RenderTransform>
+        </Separator>
+        <Separator Margin="102,61,43,107" BorderBrush="Black" BorderThickness="3"/>
+        <Separator Margin="44,195,43,-27" BorderBrush="Black" BorderThickness="3"/>
+        <Label Content="Result" HorizontalAlignment="Left" Margin="53,124,0,0" VerticalAlignment="Top"/>
+        <Label Content="Please select the text file with the changes" HorizontalAlignment="Left" Margin="48,42,0,0" VerticalAlignment="Top"/>
+        <Label Content="Successful Changes Applied:" HorizontalAlignment="Left" Margin="53,164,0,0" VerticalAlignment="Top"/>
+        <Label Content="Duplicate Records Discarded:" HorizontalAlignment="Left" Margin="53,195,0,0" VerticalAlignment="Top"/>
+        <Label Content="Record with missing flieds discarded:" HorizontalAlignment="Left" Margin="53,231,0,0" VerticalAlignment="Top"/>
+        <Label Content="{Binding SuccessfulChangesApplied}" HorizontalAlignment="Left" Margin="335,163,0,0" VerticalAlignment="Top" Height="26" Width="30"/>
+        <Label Content="{Binding DuplicateRecordsDiscarded}" HorizontalAlignment="Left" Margin="335,194,0,0" VerticalAlignment="Top" Height="27" Width="30"/>
+        <Label Content="{Binding Recordwithmissingfliedsdiscarded}" HorizontalAlignment="Left" Margin="335,230,0,0" VerticalAlignment="Top" Height="27" Width="30"/>
+        <Button x:Name="ShowTextFile" Background="White" Click="SearchFileButtonClick" HorizontalAlignment="Left" Margin="48,78,0,0" VerticalAlignment="Top" Width="266" Height="20" />
+        <Button Background="White" Content="Import" HorizontalAlignment="Left" Margin="340,78,0,0" VerticalAlignment="Top" Width="117" Command="{Binding UpdateTextSchedules}" CommandParameter="{Binding ElementName=ShowTextFile, Path=Content}"/>
+    </Grid>
+</Window>

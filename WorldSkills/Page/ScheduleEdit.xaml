@@ -1,0 +1,60 @@
+﻿<Window x:Class="WorldSkills.Page.ScheduleEdit" WindowStyle="ToolWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WorldSkills.Page" xmlns:viewmodel="clr-namespace:WorldSkills.ViewModel" d:DataContext="{d:DesignInstance Type=viewmodel:ManageFlightSchedulesDataManager}"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
+        Title="Schedule edit" Height="300" Width="600" MinHeight="300" MinWidth="600" MaxHeight="300" MaxWidth="600">
+    <Window.Resources>
+        <viewmodel:UpdateSchedulesMultyConverter x:Key="Converter"/>
+    </Window.Resources>
+    <Grid Height="300" Width="600">
+        <Separator Margin="19,-92,28,-9" BorderBrush="Black" BorderThickness="3"/>
+        <Separator Margin="535,-91,-8,65" BorderBrush="Black" BorderThickness="3" RenderTransformOrigin="0.5,0.5">
+            <Separator.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform Angle="89.87"/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </Separator.RenderTransform>
+        </Separator>
+        <Separator Margin="-18,-93,545,62" BorderBrush="Black" BorderThickness="3" RenderTransformOrigin="0.5,0.5">
+            <Separator.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform Angle="89.87"/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </Separator.RenderTransform>
+        </Separator>
+        <Separator Margin="95,-187,29,41" BorderBrush="Black" BorderThickness="3"/>
+        <Label Content="Filter route" HorizontalAlignment="Left" Margin="24,21,0,0" VerticalAlignment="Top" Width="85"/>
+        <Label Content="{Binding SelectedSchedules.ArrivalAirport}" HorizontalAlignment="Left" Margin="167,58,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+        <Label Content="To:" HorizontalAlignment="Left" Margin="143,58,0,0" VerticalAlignment="Top"/>
+        <Label Content="{Binding SelectedSchedules.DepartureAirport}" HorizontalAlignment="Left" Margin="68,58,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+        <Label Content="From:" HorizontalAlignment="Left" Margin="31,58,0,0" VerticalAlignment="Top"/>
+        <Label Content="Aircraft:" HorizontalAlignment="Left" Margin="245,58,0,0" VerticalAlignment="Top"/>
+        <Label Content="{Binding SelectedSchedules.AircraftID}" HorizontalAlignment="Left" Margin="300,58,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+        <Label Content="Date:" HorizontalAlignment="Left" Margin="22,155,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="Date" HorizontalAlignment="Left" Margin="70,156,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="26"/>
+        <Label Content="Time:" HorizontalAlignment="Left" Margin="225,155,0,0" VerticalAlignment="Top" Width="43"/>
+        <TextBox x:Name="Time" HorizontalAlignment="Left" Margin="273,156,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="100" Height="26"/>
+        <Label Content="Economy Price: $" HorizontalAlignment="Left" Margin="418,155,0,0" VerticalAlignment="Top" Width="100"/>
+        <TextBox x:Name="Price" HorizontalAlignment="Left" Margin="523,156,0,0"  TextWrapping="Wrap" VerticalAlignment="Top" Width="50" Height="26"/>
+        <Button Command="{Binding UpdateSchedules}" Content="Update" Background="White" HorizontalAlignment="Left" Margin="313,229,0,0" VerticalAlignment="Top" Width="117">
+            <Button.CommandParameter>
+                <MultiBinding Converter="{StaticResource Converter}">
+                    <Binding ElementName="Date" Path="Text"/>
+                    <Binding ElementName="Time" Path="Text"/>
+                    <Binding ElementName="Price" Path="Text"/>
+                </MultiBinding>
+            </Button.CommandParameter>
+        </Button>
+        <Button Content="Cancel" Background="White" HorizontalAlignment="Left" Margin="456,229,0,0" VerticalAlignment="Top" Width="117"/>
+    </Grid>
+</Window>

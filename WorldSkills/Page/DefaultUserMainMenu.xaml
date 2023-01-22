@@ -1,0 +1,51 @@
+﻿<Window x:Class="WorldSkills.Page.DefaultUserMainMenu" WindowStyle="None"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WorldSkills.Page" xmlns:viewmodel="clr-namespace:WorldSkills.ViewModel" d:DataContext="{d:DesignInstance Type=viewmodel:UserDataManager}"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
+        Title="BELAVIA Airline Automation System" MinHeight="450" MinWidth="800" MaxHeight="450" MaxWidth="800">
+    <Grid MinHeight="450" MinWidth="800" MaxHeight="450" MaxWidth="800">
+        <ToolBar Height="25" VerticalAlignment="Top">
+            <Button Content="Search For Flights" Click="SearchForFlightsButtonClick"/>
+            <Button Content ="Exit" Command="{Binding UpdateLogoutCommand}" CommandParameter="{Binding Path=NumberOfCrashes}"/>
+        </ToolBar>
+        <Label Content="{Binding Path = IntroductionText}" Margin="10,30,445,386"/>
+        <Label Content="Time spent on system:" Margin="320,66,350,354"/>
+        <Label Content="Number of crashes:" Margin="570,66,110,354"/>
+        <ListView Margin="80,101,80,76" Grid.Column="0" ItemsSource ="{Binding Tracking}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn 
+                        DisplayMemberBinding = "{Binding Path = Date}">Date
+                    </GridViewColumn>
+                    <GridViewColumn 
+                        DisplayMemberBinding = "{Binding Path = LoginTime}">Login time
+                    </GridViewColumn>
+                    <GridViewColumn 
+                        DisplayMemberBinding = "{Binding Path = LogoutTime}">Logout time
+                    </GridViewColumn>
+                    <GridViewColumn 
+                        DisplayMemberBinding = "{Binding Path = TimeSpentOnSystem}">Time spent on system
+                    </GridViewColumn>
+                    <GridViewColumn 
+                        DisplayMemberBinding = "{Binding Path = UnsuccessfulLogoutReason}">Unsuccessful logout reason
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Path=IsException}" Value = "True">
+                            <Setter Property="Background" Value="Red"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ListView.ItemContainerStyle>
+        </ListView>
+        <Label Content="{Binding Path=TimeSpent}" HorizontalAlignment="Left" Margin="455,68,0,0" VerticalAlignment="Top" Height="28" Width="65"/>
+        <Label Content="{Binding Path= NumberOfCrashes}" HorizontalAlignment="Left" Margin="690,66,0,0" VerticalAlignment="Top" Height="28" Width="35"/>
+    </Grid>
+</Window>
