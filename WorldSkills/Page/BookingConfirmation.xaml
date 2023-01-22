@@ -102,26 +102,26 @@
         <Label Content="Outbound flight details:" HorizontalAlignment="Left" Margin="40,-1,0,0" VerticalAlignment="Top"/>
         <Label Content="Return flight details:" HorizontalAlignment="Left" Margin="40,89,0,0" VerticalAlignment="Top"/>
         <Label Content="Passenger details" HorizontalAlignment="Left" Margin="40,189,0,0" VerticalAlignment="Top" Width="125"/>
-        <ListView Margin="40,349,40,81" SelectedItem ="{Binding SelectedTicket}" ItemsSource="{Binding AllTickets}">
+        <ListView Margin="40,349,40,81" SelectedItem ="{Binding SelectedTicket}" ItemsSource="{Binding NewTickets}">
             <ListView.View>
                 <GridView>
                     <GridViewColumn 
-                        DisplayMemberBinding = "{Binding Path = Data}">Firstname
+                        DisplayMemberBinding = "{Binding Path = Firstname}">Firstname
                     </GridViewColumn>
                     <GridViewColumn 
-                        DisplayMemberBinding = "{Binding Path = Time}">Lastname
+                        DisplayMemberBinding = "{Binding Path = Lastname}">Lastname
                     </GridViewColumn>
                     <GridViewColumn 
-                        DisplayMemberBinding = "{Binding Path = DepartureAirport}">Birthdate
+                        DisplayMemberBinding = "{Binding Path = Birthday}">Birthdate
                     </GridViewColumn>
                     <GridViewColumn 
-                        DisplayMemberBinding = "{Binding Path = ArrivalAirport}">Passport number
+                        DisplayMemberBinding = "{Binding Path = PassportNumber}">Passport number
                     </GridViewColumn>
                     <GridViewColumn 
-                        DisplayMemberBinding = "{Binding Path = FlightNumber}">Passport country
+                        DisplayMemberBinding = "{Binding Path = PassportCountryID}">Passport country
                     </GridViewColumn>
                     <GridViewColumn 
-                        DisplayMemberBinding = "{Binding Path = AircraftID}">Phone
+                        DisplayMemberBinding = "{Binding Path = Phone}">Phone
                     </GridViewColumn>
                 </GridView>
             </ListView.View>

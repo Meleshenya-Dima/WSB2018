@@ -112,7 +112,6 @@ namespace WorldSkills.Model
             set
             {
                 CabineName = value;
-                _cabinePrice = "$";
                 if (value == "Business")
                 {
                     _cabinePrice = (EconomyPrice + (EconomyPrice * (decimal)0.35)).ToString();

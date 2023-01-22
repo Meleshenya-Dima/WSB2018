@@ -28,7 +28,7 @@ namespace WorldSkills.Model
                     return null;
                 }
             }
-            else if(values.Length == 6)
+            else if (values.Length == 6)
             {
                 string Firstname = values[0] as string;
                 string Lastname = values[1] as string;
@@ -38,7 +38,7 @@ namespace WorldSkills.Model
                 string Phone = values[5] as string;
                 if (!string.IsNullOrEmpty(Firstname) && !string.IsNullOrEmpty(Lastname) && !string.IsNullOrEmpty(Birthdate) && !string.IsNullOrEmpty(PasswordNumber) && !string.IsNullOrEmpty(PassportCountry) && !string.IsNullOrEmpty(Phone))
                 {
-                    return new Tickets { Phone = Phone, PassportNumber =  PasswordNumber, PassportCountryID = PassportCountry, Firstname = Firstname, Lastname = Lastname };
+                    return new Tickets { Phone = Phone, Birthday = Birthdate, PassportNumber = PasswordNumber,  PassportCountryName = PassportCountry, Firstname = Firstname, Lastname = Lastname };
                 }
                 else
                 {

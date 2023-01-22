@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using WorldSkills.Model;
 
@@ -14,6 +15,7 @@ namespace WorldSkills.ViewModel
             AllAirports = TakeAllAirports();
             CabinTypes = TakeAllCabinTypes();
             AllCountry = TakeAllCountries();
+            AllTickets = TakeAllTickets();
         }
 
 
@@ -25,8 +27,9 @@ namespace WorldSkills.ViewModel
         private bool _selectedOneWay;
         private ObservableCollection<Airport> _allAirports;
         private ObservableCollection<Countries> _allCountry;
-        private int _totalAmount;
+        private float _totalAmount;
         private Schedules _selectReturnAirports;
+        private ObservableCollection<Tickets> _newTickets;
         private ObservableCollection<Tickets> _allTickets;
         private Command _searchForFlightApply;
         private Command _addTicket;
@@ -37,11 +40,34 @@ namespace WorldSkills.ViewModel
 
         public ObservableCollection<Tickets> AllTickets
         {
-            get => _allTickets;
+            get
+            {
+                if (_allTickets is null)
+                {
+                    _allTickets = new ObservableCollection<Tickets>();
+                }
+                return _allTickets;
+            }
             set
             {
                 _allTickets = value;
                 OnPropertyChanged("AllTickets");
+            }
+        }
+        public ObservableCollection<Tickets> NewTickets
+        {
+            get
+            {
+                if (_newTickets is null)
+                {
+                    _newTickets = new ObservableCollection<Tickets>();
+                }
+                return _newTickets;
+            }
+            set
+            {
+                _newTickets = value;
+                OnPropertyChanged("NewTickets");
             }
         }
         public ObservableCollection<Countries> AllCountry
@@ -98,7 +124,7 @@ namespace WorldSkills.ViewModel
                 OnPropertyChanged("SelectOutboundAiports");
             }
         }
-        public int TotalAmount
+        public float TotalAmount
         {
             get => _totalAmount;
             set
@@ -154,6 +180,19 @@ namespace WorldSkills.ViewModel
         }
 
 
+        public ObservableCollection<Tickets> TakeAllTickets()
+        {
+            ObservableCollection<Tickets> tickets = new();
+            WorkWithDatabase.SetSqlCommand("SELECT * FROM [Tickets]");
+            SqlDataReader sqlDataReader = WorkWithDatabase.SqlCommand.ExecuteReader();
+            while (sqlDataReader.Read())
+            {
+                tickets.Add(new Tickets { ID = int.Parse(sqlDataReader.GetValue(0).ToString()), UserID = int.Parse(sqlDataReader.GetValue(1).ToString()), ScheduleID = int.Parse(sqlDataReader.GetValue(2).ToString()), CabinTypeID = int.Parse(sqlDataReader.GetValue(3).ToString()), Firstname = sqlDataReader.GetValue(4).ToString(), Lastname = sqlDataReader.GetValue(5).ToString(), Email = sqlDataReader.GetValue(6).ToString(), Phone = sqlDataReader.GetValue(7).ToString(), PassportNumber = sqlDataReader.GetValue(8).ToString(), PassportCountryID = int.Parse(sqlDataReader.GetValue(9).ToString()), BookingReference = sqlDataReader.GetValue(10).ToString(), Confirmed = bool.Parse(sqlDataReader.GetValue(11).ToString()) });
+            }
+            sqlDataReader.Close();
+            return tickets;
+
+        }
         public ObservableCollection<Countries> TakeAllCountries()
         {
             ObservableCollection<Countries> countries = new();
@@ -196,7 +235,24 @@ namespace WorldSkills.ViewModel
         {
             if (obj is Tickets tickets)
             {
-                AllTickets.Add(tickets);
+                foreach (var Tickets in AllCountry)
+                {
+                    if (tickets.PassportCountryName == Tickets.Name)
+                    {
+                        float sum = float.Parse(SelectOutboundAiports.CabinePrice);
+                        if (!SelectedOneWay)
+                        {
+                            _totalAmount += sum; 
+                        }
+                        else
+                        {
+                            _totalAmount += sum * 2;
+                        }
+                        tickets.PassportCountryID = Tickets.ID;
+                        NewTickets.Insert(0, tickets);
+                        break;
+                    }
+                }
             }
         });
 
@@ -204,7 +260,15 @@ namespace WorldSkills.ViewModel
         {
             if (obj is Tickets tickets)
             {
-                AllTickets.Remove(tickets);
+                if (SelectedOneWay)
+                {
+                    _totalAmount -= int.Parse(SelectOutboundAiports.CabinePrice);
+                }
+                else
+                {
+                    _totalAmount -= int.Parse(SelectOutboundAiports.CabinePrice) * 2;
+                }
+                NewTickets.Remove(tickets);
             }
         });
 

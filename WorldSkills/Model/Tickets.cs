@@ -12,6 +12,8 @@ namespace WorldSkills.Model
 
         public int UserID { get; set; }
 
+        public int ScheduleID { get; set; }
+
         public int CabinTypeID { get; set; }
 
         public string Firstname { get; set; }
@@ -24,10 +26,15 @@ namespace WorldSkills.Model
 
         public string PassportNumber { get; set; }
 
-        public string PassportCountryID { get; set; }
+        public int PassportCountryID { get; set; }
 
         public string BookingReference { get; set; }
 
         public bool Confirmed { get; set; }
+
+        public string Birthday { get; set; }
+
+        public string PassportCountryName { get; set; }
+
     }
 }
