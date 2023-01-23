@@ -38,38 +38,35 @@
         <Label Content="Flight List" HorizontalAlignment="Left" Margin="43,59,0,0" VerticalAlignment="Top" Width="85"/>
         <Label Content="Choose you flight:" HorizontalAlignment="Left" Margin="65,112,0,0" VerticalAlignment="Top"/>
         <ComboBox SelectedItem="{Binding SelectedTextTicket}" x:Name="ChooseFlight" HorizontalAlignment="Left" Margin="212,118,0,0" VerticalAlignment="Top" Width="260" ItemsSource="{Binding ComboBoxText}"/>
-        <Button Content="Show Amenities" Background="White" HorizontalAlignment="Left" Margin="550,117,0,0" VerticalAlignment="Top" Width="95"/>
-        <Label Content="FullName:" HorizontalAlignment="Left" Margin="47,180,0,0" VerticalAlignment="Top"/>
-        <Label Content="Passport number:" HorizontalAlignment="Left" Margin="260,182,0,0" VerticalAlignment="Top" Width="115"/>
+        <Button  Content="Show Amenities" Command="{Binding ShowAmenities}" Background="White" HorizontalAlignment="Left" Margin="550,117,0,0" VerticalAlignment="Top" Width="95" CommandParameter="{Binding SelectedTicket}"/>
+        <Label Content="FullName:" HorizontalAlignment="Left" Margin="48,174,0,0" VerticalAlignment="Top" Height="28" Width="62"/>
+        <Label Content="Passport number:" HorizontalAlignment="Left" Margin="260,174,0,0" VerticalAlignment="Top" Width="115" Height="28"/>
         <Grid DataContext="{Binding SelectedTicket}">
-            <Label Content="{Binding Path=Firstname}" HorizontalAlignment="Left" Margin="115,179,0,0" VerticalAlignment="Top" Height="25" Width="135"/>
-            <Label Content="{Binding Path=PassportNumber}" HorizontalAlignment="Left" Margin="375,182,0,0" VerticalAlignment="Top" Width="120" Height="27"/>
-            <Label Content="{Binding Path=CabinTypeID}" HorizontalAlignment="Left" Margin="160,209,0,0" VerticalAlignment="Top" Width="123" Height="25"/>
+            <Label Content="{Binding Path=Firstname}" HorizontalAlignment="Left" Margin="115,174,0,0" VerticalAlignment="Top" Height="22" Width="135"/>
+            <Label Content="{Binding Path=PassportNumber}" HorizontalAlignment="Left" Margin="375,174,0,0" VerticalAlignment="Top" Width="120" Height="22"/>
+            <Label Content="{Binding Path=CabinTypeID}" HorizontalAlignment="Left" Margin="160,204,0,0" VerticalAlignment="Top" Width="123" Height="20"/>
         </Grid>
-        <Label Content="Your cabin class is:" HorizontalAlignment="Left" Margin="48,207,0,0" VerticalAlignment="Top"/>
-        <Separator Margin="47,159,63,-37" BorderBrush="Black" BorderThickness="3"/>
-        <Separator Margin="652,146,1,78" BorderBrush="Black" BorderThickness="3" RenderTransformOrigin="0.5,0.5">
-            <Separator.RenderTransform>
-                <TransformGroup>
-                    <ScaleTransform/>
-                    <SkewTransform/>
-                    <RotateTransform Angle="89.87"/>
-                    <TranslateTransform/>
-                </TransformGroup>
-            </Separator.RenderTransform>
-        </Separator>
-        <Separator Margin="-16,144,669,75" BorderBrush="Black" BorderThickness="3" RenderTransformOrigin="0.5,0.5">
-            <Separator.RenderTransform>
-                <TransformGroup>
-                    <ScaleTransform/>
-                    <SkewTransform/>
-                    <RotateTransform Angle="89.87"/>
-                    <TranslateTransform/>
-                </TransformGroup>
-            </Separator.RenderTransform>
-        </Separator>
-        <Separator Margin="200,70,64,130" BorderBrush="Black" BorderThickness="3"/>
-        <Label Content="BELAVIA Airlines Amenities" HorizontalAlignment="Left" Margin="48,230,0,0" VerticalAlignment="Top" Width="165"/>
+        <ListView ItemsSource="{Binding AllAmenities}" Margin="100,254,135,159">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn 
+                        DisplayMemberBinding = "{Binding Path = Service}">Service
+                    </GridViewColumn>
+                    <GridViewColumn 
+                        DisplayMemberBinding = "{Binding Path = Price}">Price
+                    </GridViewColumn>
+                    <GridViewColumn>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox IsChecked="{Binding IsActive}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <Label Content="Your cabin class is:" HorizontalAlignment="Left" Margin="48,199,0,0" VerticalAlignment="Top" Height="25"/>
+        <Label Content="BELAVIA Airlines Amenities" HorizontalAlignment="Left" Margin="48,220,0,0" VerticalAlignment="Top" Width="165"/>
         <Label Content="Items selected:" HorizontalAlignment="Left" Margin="48,396,0,0" VerticalAlignment="Top"/>
         <Label Content="Duties and taxes:" HorizontalAlignment="Left" Margin="48,420,0,0" VerticalAlignment="Top"/>
         <Label Content="Total payble:" HorizontalAlignment="Left" Margin="48,446,0,0" VerticalAlignment="Top"/>

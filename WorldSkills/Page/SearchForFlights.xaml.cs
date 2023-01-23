@@ -1,16 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using WorldSkills.ViewModel;
 
 namespace WorldSkills.Page
@@ -30,10 +19,33 @@ namespace WorldSkills.Page
 
         private void BookingConfirmationButtonClick(object sender, RoutedEventArgs e)
         {
-            
-            var page = new BookingConfirmation(_dataView);
-            page.ShowDialog();
-            this.Hide();
+            if ((bool)ReturnRadioButton.IsChecked)
+            {
+                if (SearchForFlightsDataManager.SelectOutboundAiportscountTicket > SearchForFlightsDataManager.CountTicket && SearchForFlightsDataManager.SelectReturnAirportsCountTicket > SearchForFlightsDataManager.CountTicket)
+                {
+                    var page = new BookingConfirmation(_dataView);
+                    page.ShowDialog();
+                    this.Hide();
+                }
+                else
+                {
+                    MessageBox.Show("Количество заказанных билетов больше, чем мест!");
+                }
+            }
+            else
+            {
+                if (SearchForFlightsDataManager.SelectOutboundAiportscountTicket > SearchForFlightsDataManager.CountTicket)
+                {
+                    var page = new BookingConfirmation(_dataView);
+                    page.ShowDialog();
+                    this.Hide();
+                }
+                else
+                {
+                    MessageBox.Show("Количество заказанных билетов больше, чем мест!");
+                }
+
+            }
         }
 
         private void CountPassengersTextChanged(object sender, TextChangedEventArgs e)

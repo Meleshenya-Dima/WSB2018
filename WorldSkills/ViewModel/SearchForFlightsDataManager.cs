@@ -16,9 +16,10 @@ namespace WorldSkills.ViewModel
             CabinTypes = TakeAllCabinTypes();
             AllCountry = TakeAllCountries();
             AllTickets = TakeAllTickets();
+            AllAircrafts = TakeAircrafts();
         }
 
-
+        private ObservableCollection<Aircrafts> _aircrafts;
         private ObservableCollection<string> _cabinTypes;
         private ObservableCollection<Schedules> _returnAiports;
         private Airport _selectedAirportsFrom;
@@ -38,20 +39,47 @@ namespace WorldSkills.ViewModel
         private Schedules _selectOutboundAiports;
         private string _generationCode;
         private Command _generationCodeCommand;
-        private static int _countTicket;
+        private static int _selectOutboundAiportsCountTicket;
+        private static int _selectReturnAirportsCountTicket;
+        public static int CountTicket;
 
-
-        public static int CountTicket
+        public static int SelectReturnAirportsCountTicket
         {
             get
             {
-                return _countTicket;
+                return _selectReturnAirportsCountTicket;
             }
             set
             {
-                _countTicket = value;
+                _selectReturnAirportsCountTicket = value;
             }
         }
+
+        public static int SelectOutboundAiportscountTicket
+        {
+            get
+            {
+                return _selectOutboundAiportsCountTicket;
+            }
+            set
+            {
+                _selectOutboundAiportsCountTicket = value;
+            }
+        }
+
+        public ObservableCollection<Aircrafts> AllAircrafts
+        {
+            get
+            {
+                return _aircrafts;
+            }
+            set
+            {
+                _aircrafts = value;
+                OnPropertyChanged("Aircrafts");
+            }
+        }
+
         public ObservableCollection<Tickets> AllTickets
         {
             get
@@ -123,13 +151,65 @@ namespace WorldSkills.ViewModel
                 OnPropertyChanged("SelectedAirportsTo");
             }
         }
+
+
+
         public Schedules SelectReturnAirports
         {
             get => _selectReturnAirports;
             set
             {
+                int index = 0;
                 _selectReturnAirports = value;
                 OnPropertyChanged("SelectReturnAirports");
+                for (int i = 0; i < CabinTypes.Count; i++)
+                {
+                    if (CabinTypes[i] == SelectReturnAirports.CabineName)
+                    {
+                        index = i + 1;
+                        break;
+                    }
+                }
+                WorkWithDatabase.SetSqlCommand($"SELECT COUNT(*) FROM Tickets WHERE ScheduleID = {SelectReturnAirports.ID} AND CabinTypeID = {index}");
+                SqlDataReader countTikets = WorkWithDatabase.SqlCommand.ExecuteReader();
+                if (countTikets.Read())
+                {
+                    int thisCountTickets = int.Parse(countTikets.GetValue(0).ToString());
+                    if (SelectReturnAirports.CabineName == "First Class")
+                    {
+                        for (int i = 0; i < AllAircrafts.Count; i++)
+                        {
+                            int x = AllAircrafts[i].TotalSeats - (thisCountTickets + AllAircrafts[i].BusinessSeats + AllAircrafts[i].EconomySeats);
+                            SelectReturnAirportsCountTicket = x;
+                          
+                        }
+                    }
+                    else if (SelectReturnAirports.CabineName == "Business")
+                    {
+                        for (int i = 0; i < AllAircrafts.Count; i++)
+                        {
+                            if (SelectReturnAirports.AircraftID == AllAircrafts[i].ID)
+                            {
+                                SelectReturnAirportsCountTicket = AllAircrafts[i].BusinessSeats - thisCountTickets;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        for (int i = 0; i < AllAircrafts.Count; i++)
+                        {
+                            if (SelectReturnAirports.AircraftID == AllAircrafts[i].ID)
+                            {
+                                SelectReturnAirportsCountTicket = AllAircrafts[i].EconomySeats - thisCountTickets;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    SelectReturnAirportsCountTicket = 161;
+                }
+                countTikets.Close();
             }
         }
         public Schedules SelectOutboundAiports
@@ -137,10 +217,63 @@ namespace WorldSkills.ViewModel
             get => _selectOutboundAiports;
             set
             {
+                int index = 0;
                 _selectOutboundAiports = value;
                 OnPropertyChanged("SelectOutboundAiports");
+                for (int i = 0; i < CabinTypes.Count; i++)
+                {
+                    if (CabinTypes[i] == SelectOutboundAiports.CabineName)
+                    {
+                        index = i + 1;
+                        break;
+                    }
+                }
+                WorkWithDatabase.SetSqlCommand($"SELECT COUNT(*) FROM Tickets WHERE ScheduleID = {SelectOutboundAiports.ID} AND CabinTypeID = {index}");
+                SqlDataReader countTikets = WorkWithDatabase.SqlCommand.ExecuteReader();
+                if (countTikets.Read())
+                {
+                    int thisCountTickets = int.Parse(countTikets.GetValue(0).ToString());
+                    if (SelectOutboundAiports.CabineName == "First Class")
+                    {
+                        for (int i = 0; i < AllAircrafts.Count; i++)
+                        {
+                            int x = AllAircrafts[i].TotalSeats - (thisCountTickets + AllAircrafts[i].BusinessSeats + AllAircrafts[i].EconomySeats);
+                            SelectOutboundAiportscountTicket = x;
+
+                        }
+                    }
+                    else if (SelectOutboundAiports.CabineName == "Business")
+                    {
+                        for (int i = 0; i < AllAircrafts.Count; i++)
+                        {
+                            if (SelectOutboundAiports.AircraftID == AllAircrafts[i].ID)
+                            {
+                                SelectOutboundAiportscountTicket = AllAircrafts[i].BusinessSeats - thisCountTickets;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        for (int i = 0; i < AllAircrafts.Count; i++)
+                        {
+                            if (SelectOutboundAiports.AircraftID == AllAircrafts[i].ID)
+                            {
+                                SelectOutboundAiportscountTicket = AllAircrafts[i].EconomySeats - thisCountTickets;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    SelectReturnAirportsCountTicket = 161;
+                }
+                countTikets.Close();
             }
         }
+
+
+
+
         public float TotalAmount
         {
             get => _totalAmount;
@@ -258,6 +391,18 @@ namespace WorldSkills.ViewModel
             return cabinTypes;
         }
 
+        public ObservableCollection<Aircrafts> TakeAircrafts()
+        {
+            ObservableCollection<Aircrafts> aircrafts = new ObservableCollection<Aircrafts>();
+            WorkWithDatabase.SetSqlCommand("SELECT * FROM [Aircrafts]");
+            SqlDataReader sqlDataReader = WorkWithDatabase.SqlCommand.ExecuteReader();
+            while (sqlDataReader.Read())
+            {
+                aircrafts.Add(new Aircrafts {ID = int.Parse(sqlDataReader.GetValue(0).ToString()), Name = sqlDataReader.GetValue(1).ToString(), MakeModel = sqlDataReader.GetValue(2).ToString(), TotalSeats = int.Parse(sqlDataReader.GetValue(3).ToString()), EconomySeats = int.Parse(sqlDataReader.GetValue(4).ToString()), BusinessSeats = int.Parse(sqlDataReader.GetValue(5).ToString()) });
+            }
+            sqlDataReader.Close();
+            return aircrafts;
+        }
 
         public Command AddTicket => _addTicket ??= new Command(obj =>
         {
@@ -380,6 +525,8 @@ namespace WorldSkills.ViewModel
                 WorkWithDatabase.SqlCommand.ExecuteNonQuery();
             }
         });
+
+
 
         #region
         public event PropertyChangedEventHandler PropertyChanged;

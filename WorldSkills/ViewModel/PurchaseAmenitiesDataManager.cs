@@ -11,7 +11,7 @@ namespace WorldSkills.ViewModel
 
         public PurchaseAmenitiesDataManager()
         {
-            AllAmenities = GetAmenities();
+            
         }
 
         private Tickets _selectedTicket;
@@ -51,7 +51,7 @@ namespace WorldSkills.ViewModel
             SqlDataReader reader = WorkWithDatabase.SqlCommand.ExecuteReader();
             while (reader.Read())
             {
-                amenities.Add(new Amenities { ID = int.Parse(reader.GetValue(0).ToString()), Service = reader.GetValue(1).ToString(), Price = float.Parse(reader.GetValue(0).ToString()) });
+                amenities.Add(new Amenities { ID = int.Parse(reader.GetValue(0).ToString()), Service = reader.GetValue(1).ToString(), Price = float.Parse(reader.GetValue(2).ToString()), Take = false });
             }
             reader.Close();
             return amenities;
@@ -114,6 +114,15 @@ namespace WorldSkills.ViewModel
                 ComboBoxText = comboBoxText;
                 reader.Close();
                 PersonTickets = personTickets;
+            }
+        });
+
+        private Command _showAmenities;
+        public Command ShowAmenities => _showAmenities ??= new Command(obj =>
+        {
+            if (obj is Tickets ticket)
+            {
+                AllAmenities = GetAmenities();
             }
         });
 
