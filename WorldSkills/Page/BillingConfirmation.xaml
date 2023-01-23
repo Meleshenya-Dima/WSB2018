@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="Billing Confirmation" Height="373" Width="500" MaxHeight="373" MaxWidth="500" MinHeight="373" MinWidth="500" >
     <Grid Height="373" Width="500" >
-        <Button Content="Issue tickets" Background="White" Margin="102,274,285,63"  Height="20"/>
+        <Button Command="{Binding GenerationCodeCommand}" CommandParameter="{Binding TotalAmount}" Content="Issue tickets" Background="White" Margin="102,274,285,63"  Height="20"/>
         <Button Background="White" Content="Cancel"  Margin="265,274,110,63" Height="20" Width="125" />
         <Label Content="Total amount:" FontSize="16" Margin="67,105,320,219"/>
         <Label Content="Paid using:" FontSize="16" Margin="67,142,320,178"/>
@@ -16,5 +16,6 @@
         <RadioButton Content="Voucher" HorizontalAlignment="Center" Margin="0,219,0,0" VerticalAlignment="Top"/>
         <Label Content="$" FontSize="16" Margin="237,105,245,219"/>
         <Label Content="{Binding TotalAmount}" FontSize="16" Margin="255,105,192,219"/>
+        <Label Content="{Binding GenerationCode}" FontSize="16" Margin="195,30,192,294"/>
     </Grid>
 </Window>

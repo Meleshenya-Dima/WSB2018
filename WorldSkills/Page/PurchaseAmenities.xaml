@@ -2,14 +2,17 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:WorldSkills.Page"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:viewmodel="clr-namespace:WorldSkills.ViewModel" d:DataContext="{d:DesignInstance Type=viewmodel:PurchaseAmenitiesDataManager}"
         mc:Ignorable="d"
         Title="Purchase Amenities" Height="550" Width="780">
     <Grid Height="550" Width="780">
         <Label Content="Booking reference:" HorizontalAlignment="Left" Margin="45,28,0,0" VerticalAlignment="Top"/>
-        <TextBox HorizontalAlignment="Left" Margin="158,32,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="125" Height="22"/>
-        <Button Background="White" Content="OK" HorizontalAlignment="Left" Margin="310,31,0,0" VerticalAlignment="Top" Width="45"/>
+        <TextBox x:Name="BookingReference" HorizontalAlignment="Left" Margin="158,32,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="125" Height="22"/>
+        <Button Background="White" Content="OK" HorizontalAlignment="Left" Margin="310,31,0,0" VerticalAlignment="Top" Width="45" Command="{Binding SelectTickets}">
+            <Button.CommandParameter>
+                <Binding ElementName="BookingReference" Path="Text"/>
+            </Button.CommandParameter>
+        </Button>
         <Separator Margin="47,-52,63,156" BorderBrush="Black" BorderThickness="3"/>
         <Separator Margin="669,-39,16,263" BorderBrush="Black" BorderThickness="3" RenderTransformOrigin="0.5,0.5">
             <Separator.RenderTransform>
@@ -34,11 +37,16 @@
         <Separator Margin="101,-147,64,251" BorderBrush="Black" BorderThickness="3"/>
         <Label Content="Flight List" HorizontalAlignment="Left" Margin="43,59,0,0" VerticalAlignment="Top" Width="85"/>
         <Label Content="Choose you flight:" HorizontalAlignment="Left" Margin="65,112,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="Outbound" HorizontalAlignment="Left" Margin="212,118,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="260"/>
+        <ComboBox SelectedItem="{Binding SelectedTextTicket}" x:Name="ChooseFlight" HorizontalAlignment="Left" Margin="212,118,0,0" VerticalAlignment="Top" Width="260" ItemsSource="{Binding ComboBoxText}"/>
         <Button Content="Show Amenities" Background="White" HorizontalAlignment="Left" Margin="550,117,0,0" VerticalAlignment="Top" Width="95"/>
-        <Label Content="FullName: []" HorizontalAlignment="Left" Margin="47,180,0,0" VerticalAlignment="Top"/>
-        <Label Content="Passport number: []" HorizontalAlignment="Left" Margin="172,182,0,0" VerticalAlignment="Top"/>
-        <Label Content="Your cabin class is: []" HorizontalAlignment="Left" Margin="48,207,0,0" VerticalAlignment="Top"/>
+        <Label Content="FullName:" HorizontalAlignment="Left" Margin="47,180,0,0" VerticalAlignment="Top"/>
+        <Label Content="Passport number:" HorizontalAlignment="Left" Margin="260,182,0,0" VerticalAlignment="Top" Width="115"/>
+        <Grid DataContext="{Binding SelectedTicket}">
+            <Label Content="{Binding Path=Firstname}" HorizontalAlignment="Left" Margin="115,179,0,0" VerticalAlignment="Top" Height="25" Width="135"/>
+            <Label Content="{Binding Path=PassportNumber}" HorizontalAlignment="Left" Margin="375,182,0,0" VerticalAlignment="Top" Width="120" Height="27"/>
+            <Label Content="{Binding Path=CabinTypeID}" HorizontalAlignment="Left" Margin="160,209,0,0" VerticalAlignment="Top" Width="123" Height="25"/>
+        </Grid>
+        <Label Content="Your cabin class is:" HorizontalAlignment="Left" Margin="48,207,0,0" VerticalAlignment="Top"/>
         <Separator Margin="47,159,63,-37" BorderBrush="Black" BorderThickness="3"/>
         <Separator Margin="652,146,1,78" BorderBrush="Black" BorderThickness="3" RenderTransformOrigin="0.5,0.5">
             <Separator.RenderTransform>

@@ -10,6 +10,7 @@
     <Grid MinHeight="450" MinWidth="800" MaxHeight="450" MaxWidth="800">
         <ToolBar Height="25" VerticalAlignment="Top">
             <Button Content="Search For Flights" Click="SearchForFlightsButtonClick"/>
+            <Button Content="Additional services" Click="AdditionalServicesButtonClick"/>
             <Button Content ="Exit" Command="{Binding UpdateLogoutCommand}" CommandParameter="{Binding Path=NumberOfCrashes}"/>
         </ToolBar>
         <Label Content="{Binding Path = IntroductionText}" Margin="10,30,445,386"/>

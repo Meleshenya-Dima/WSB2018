@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using WorldSkills.ViewModel;
 
 namespace WorldSkills.Page
 {
@@ -22,6 +23,7 @@ namespace WorldSkills.Page
         public PurchaseAmenities()
         {
             InitializeComponent();
+            DataContext = new PurchaseAmenitiesDataManager();
         }
     }
 }

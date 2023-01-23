@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace WorldSkills.ViewModel
@@ -19,6 +20,14 @@ namespace WorldSkills.ViewModel
         public static bool EmailChecker(string email)
         {
             return Regex.IsMatch(email, _emailValidation, RegexOptions.IgnoreCase);
+        }
+
+        public static string GenerationNumber()
+        {
+            Random random = new Random();
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            return new string(Enumerable.Repeat(chars, 6)
+                .Select(s => s[random.Next(s.Length)]).ToArray());
         }
     }
 }

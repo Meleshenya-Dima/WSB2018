@@ -2,9 +2,9 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data.SqlClient;
-using System.Linq;
 using System.Runtime.CompilerServices;
 using WorldSkills.Model;
+using WorldSkills.Page;
 
 namespace WorldSkills.ViewModel
 {
@@ -36,8 +36,22 @@ namespace WorldSkills.ViewModel
         private Command _removeTicket;
         private Tickets _selectedTicket;
         private Schedules _selectOutboundAiports;
+        private string _generationCode;
+        private Command _generationCodeCommand;
+        private static int _countTicket;
 
 
+        public static int CountTicket
+        {
+            get
+            {
+                return _countTicket;
+            }
+            set
+            {
+                _countTicket = value;
+            }
+        }
         public ObservableCollection<Tickets> AllTickets
         {
             get
@@ -66,8 +80,11 @@ namespace WorldSkills.ViewModel
             }
             set
             {
-                _newTickets = value;
-                OnPropertyChanged("NewTickets");
+                if (_newTickets.Count < CountTicket)
+                {
+                    _newTickets = value;
+                    OnPropertyChanged("NewTickets");
+                }
             }
         }
         public ObservableCollection<Countries> AllCountry
@@ -178,7 +195,18 @@ namespace WorldSkills.ViewModel
                 OnPropertyChanged("SelectedTicket");
             }
         }
-
+        public string GenerationCode
+        {
+            get
+            {
+                return _generationCode;
+            }
+            set
+            {
+                _generationCode = value;
+                OnPropertyChanged("GenerationCode");
+            }
+        }
 
         public ObservableCollection<Tickets> TakeAllTickets()
         {
@@ -235,21 +263,34 @@ namespace WorldSkills.ViewModel
         {
             if (obj is Tickets tickets)
             {
+                tickets.UserID = DefaultUserMainMenu.User.ID;
                 foreach (var Tickets in AllCountry)
                 {
                     if (tickets.PassportCountryName == Tickets.Name)
                     {
+                        for (int i = 0; i < CabinTypes.Count; i++)
+                        {
+                            if (SelectOutboundAiports.CabineName == CabinTypes[i])
+                            {
+                                tickets.CabinTypeID = i;
+                            }
+                        }
+                        tickets.PassportCountryID = Tickets.ID;
                         float sum = float.Parse(SelectOutboundAiports.CabinePrice);
                         if (!SelectedOneWay)
                         {
-                            _totalAmount += sum; 
+                            tickets.ScheduleID = SelectOutboundAiports.ID;
+                            _totalAmount += sum;
+                            NewTickets.Add(tickets);
                         }
                         else
                         {
+                            tickets.ScheduleID = SelectOutboundAiports.ID;
+                            NewTickets.Add(tickets);
+                            tickets.ScheduleID = SelectReturnAirports.ID;
+                            NewTickets.Add(tickets);
                             _totalAmount += sum * 2;
                         }
-                        tickets.PassportCountryID = Tickets.ID;
-                        NewTickets.Insert(0, tickets);
                         break;
                     }
                 }
@@ -262,11 +303,11 @@ namespace WorldSkills.ViewModel
             {
                 if (SelectedOneWay)
                 {
-                    _totalAmount -= int.Parse(SelectOutboundAiports.CabinePrice);
+                    _totalAmount -= float.Parse(SelectOutboundAiports.CabinePrice);
                 }
                 else
                 {
-                    _totalAmount -= int.Parse(SelectOutboundAiports.CabinePrice) * 2;
+                    _totalAmount -= float.Parse(SelectOutboundAiports.CabinePrice) * 2;
                 }
                 NewTickets.Remove(tickets);
             }
@@ -326,6 +367,17 @@ namespace WorldSkills.ViewModel
                 }
                 OutboundAiports = outboundSchedules;
                 ReturnAirports = returnSchedules;
+            }
+        });
+
+        public Command GenerationCodeCommand => _generationCodeCommand ??= new Command(obj =>
+        {
+            GenerationCode = DataProtection.GenerationNumber();
+            foreach (Tickets ticket in NewTickets)
+            {
+                ticket.BookingReference = GenerationCode;
+                WorkWithDatabase.SetSqlCommand($"INSERT INTO [Tickets] (UserID, ScheduleID, CabinTypeID, Firstname, Lastname, Email, Phone, PassportNumber, PassportCountryID, BookingReference, Confirmed) VALUES ({ticket.UserID}, {ticket.ScheduleID}, {ticket.CabinTypeID + 1}, '{ticket.Firstname}', '{ticket.Lastname}', '{ticket.Email}', '{ticket.Phone}', '{ticket.PassportNumber}', {ticket.PassportCountryID}, '{ticket.BookingReference}', '{ticket.Confirmed}' )");
+                WorkWithDatabase.SqlCommand.ExecuteNonQuery();
             }
         });
 

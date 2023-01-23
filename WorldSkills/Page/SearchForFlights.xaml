@@ -134,7 +134,7 @@
         </Separator>
         <Separator Margin="205,251,155,-113" BorderBrush="Black" BorderThickness="3"/>
         <Label Content="Confirm booking for" HorizontalAlignment="Left" Margin="75,466,0,0" VerticalAlignment="Top" Width="125"/>
-        <TextBox x:Name="CountPassengers" Margin="168,493,615,0" Text="" TextWrapping="Wrap" VerticalAlignment="Top"/>
+        <TextBox x:Name="CountPassengers" TextChanged="CountPassengersTextChanged" Margin="168,493,615,0" Text="" TextWrapping="Wrap" VerticalAlignment="Top"/>
         <Label Content="Passengers" HorizontalAlignment="Left" Margin="220,489,0,0" VerticalAlignment="Top" Width="75"/>
         <Button Content="Book Flight" Background="White" HorizontalAlignment="Left" Margin="438,491,0,0" VerticalAlignment="Top" Width="102" Click="BookingConfirmationButtonClick"/>
         <Button Content="Exit" HorizontalAlignment="Left" Background="White" Margin="690,489,0,0" VerticalAlignment="Top" Width="70"/>

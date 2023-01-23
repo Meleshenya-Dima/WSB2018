@@ -6,7 +6,7 @@ namespace WorldSkills.Page
     public partial class BookingConfirmation : Window
     {
         private SearchForFlightsDataManager _dataView;
-        public BookingConfirmation(object dataContext, int countPassengers)
+        public BookingConfirmation(object dataContext)
         {
             _dataView = (SearchForFlightsDataManager)dataContext;
             InitializeComponent();

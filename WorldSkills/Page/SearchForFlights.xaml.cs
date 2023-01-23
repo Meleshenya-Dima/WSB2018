@@ -30,9 +30,15 @@ namespace WorldSkills.Page
 
         private void BookingConfirmationButtonClick(object sender, RoutedEventArgs e)
         {
-            var page = new BookingConfirmation(_dataView, int.Parse(CountPassengers.Text));
+            
+            var page = new BookingConfirmation(_dataView);
             page.ShowDialog();
             this.Hide();
+        }
+
+        private void CountPassengersTextChanged(object sender, TextChangedEventArgs e)
+        {
+            SearchForFlightsDataManager.CountTicket = int.Parse(CountPassengers.Text);
         }
     }
 }
