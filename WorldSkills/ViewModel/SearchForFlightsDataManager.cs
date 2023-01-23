@@ -108,11 +108,9 @@ namespace WorldSkills.ViewModel
             }
             set
             {
-                if (_newTickets.Count < CountTicket)
-                {
-                    _newTickets = value;
-                    OnPropertyChanged("NewTickets");
-                }
+
+                _newTickets = value;
+                OnPropertyChanged("NewTickets");
             }
         }
         public ObservableCollection<Countries> AllCountry
@@ -181,7 +179,7 @@ namespace WorldSkills.ViewModel
                         {
                             int x = AllAircrafts[i].TotalSeats - (thisCountTickets + AllAircrafts[i].BusinessSeats + AllAircrafts[i].EconomySeats);
                             SelectReturnAirportsCountTicket = x;
-                          
+
                         }
                     }
                     else if (SelectReturnAirports.CabineName == "Business")
@@ -398,7 +396,7 @@ namespace WorldSkills.ViewModel
             SqlDataReader sqlDataReader = WorkWithDatabase.SqlCommand.ExecuteReader();
             while (sqlDataReader.Read())
             {
-                aircrafts.Add(new Aircrafts {ID = int.Parse(sqlDataReader.GetValue(0).ToString()), Name = sqlDataReader.GetValue(1).ToString(), MakeModel = sqlDataReader.GetValue(2).ToString(), TotalSeats = int.Parse(sqlDataReader.GetValue(3).ToString()), EconomySeats = int.Parse(sqlDataReader.GetValue(4).ToString()), BusinessSeats = int.Parse(sqlDataReader.GetValue(5).ToString()) });
+                aircrafts.Add(new Aircrafts { ID = int.Parse(sqlDataReader.GetValue(0).ToString()), Name = sqlDataReader.GetValue(1).ToString(), MakeModel = sqlDataReader.GetValue(2).ToString(), TotalSeats = int.Parse(sqlDataReader.GetValue(3).ToString()), EconomySeats = int.Parse(sqlDataReader.GetValue(4).ToString()), BusinessSeats = int.Parse(sqlDataReader.GetValue(5).ToString()) });
             }
             sqlDataReader.Close();
             return aircrafts;
@@ -409,34 +407,37 @@ namespace WorldSkills.ViewModel
             if (obj is Tickets tickets)
             {
                 tickets.UserID = DefaultUserMainMenu.User.ID;
-                foreach (var Tickets in AllCountry)
+                if (NewTickets.Count <= CountTicket)
                 {
-                    if (tickets.PassportCountryName == Tickets.Name)
+                    foreach (var Tickets in AllCountry)
                     {
-                        for (int i = 0; i < CabinTypes.Count; i++)
+                        if (tickets.PassportCountryName == Tickets.Name)
                         {
-                            if (SelectOutboundAiports.CabineName == CabinTypes[i])
+                            for (int i = 0; i < CabinTypes.Count; i++)
                             {
-                                tickets.CabinTypeID = i;
+                                if (SelectOutboundAiports.CabineName == CabinTypes[i])
+                                {
+                                    tickets.CabinTypeID = i;
+                                }
                             }
+                            tickets.PassportCountryID = Tickets.ID;
+                            float sum = float.Parse(SelectOutboundAiports.CabinePrice);
+                            if (!SelectedOneWay)
+                            {
+                                tickets.ScheduleID = SelectOutboundAiports.ID;
+                                _totalAmount += sum;
+                                NewTickets.Add(tickets);
+                            }
+                            else
+                            {
+                                tickets.ScheduleID = SelectOutboundAiports.ID;
+                                NewTickets.Add(tickets);
+                                tickets.ScheduleID = SelectReturnAirports.ID;
+                                NewTickets.Add(tickets);
+                                _totalAmount += sum * 2;
+                            }
+                            break;
                         }
-                        tickets.PassportCountryID = Tickets.ID;
-                        float sum = float.Parse(SelectOutboundAiports.CabinePrice);
-                        if (!SelectedOneWay)
-                        {
-                            tickets.ScheduleID = SelectOutboundAiports.ID;
-                            _totalAmount += sum;
-                            NewTickets.Add(tickets);
-                        }
-                        else
-                        {
-                            tickets.ScheduleID = SelectOutboundAiports.ID;
-                            NewTickets.Add(tickets);
-                            tickets.ScheduleID = SelectReturnAirports.ID;
-                            NewTickets.Add(tickets);
-                            _totalAmount += sum * 2;
-                        }
-                        break;
                     }
                 }
             }

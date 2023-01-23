@@ -126,7 +126,7 @@ namespace WorldSkills.Page {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/WorldSkills;V1.0.0.0;component/page/searchforflights.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/WorldSkills;component/page/searchforflights.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\Page\SearchForFlights.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

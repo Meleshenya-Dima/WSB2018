@@ -42,9 +42,9 @@
         <Label Content="FullName:" HorizontalAlignment="Left" Margin="48,174,0,0" VerticalAlignment="Top" Height="28" Width="62"/>
         <Label Content="Passport number:" HorizontalAlignment="Left" Margin="260,174,0,0" VerticalAlignment="Top" Width="115" Height="28"/>
         <Grid DataContext="{Binding SelectedTicket}">
-            <Label Content="{Binding Path=Firstname}" HorizontalAlignment="Left" Margin="115,174,0,0" VerticalAlignment="Top" Height="22" Width="135"/>
-            <Label Content="{Binding Path=PassportNumber}" HorizontalAlignment="Left" Margin="375,174,0,0" VerticalAlignment="Top" Width="120" Height="22"/>
-            <Label Content="{Binding Path=CabinTypeID}" HorizontalAlignment="Left" Margin="160,204,0,0" VerticalAlignment="Top" Width="123" Height="20"/>
+            <Label Content="{Binding Path=Firstname}" HorizontalAlignment="Left" Margin="115,168,0,0" VerticalAlignment="Top" Height="34" Width="135"/>
+            <Label Content="{Binding Path=PassportNumber}" HorizontalAlignment="Left" Margin="375,174,0,0" VerticalAlignment="Top" Width="120" Height="28"/>
+            <Label Content="{Binding Path=CabinTypeID}" HorizontalAlignment="Left" Margin="160,196,0,0" VerticalAlignment="Top" Width="123" Height="28"/>
         </Grid>
         <ListView ItemsSource="{Binding AllAmenities}" Margin="100,254,135,159">
             <ListView.View>
