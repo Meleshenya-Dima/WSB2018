@@ -12,7 +12,6 @@ namespace WorldSkills.ViewModel
 {
     class ManageFlightSchedulesDataManager : INotifyPropertyChanged
     {
-
         public ManageFlightSchedulesDataManager()
         {
             AllAirport = TakeAllAirport();
@@ -32,7 +31,6 @@ namespace WorldSkills.ViewModel
             }
             sqlDataReader.Close();
             return airports;
-
         }
 
 

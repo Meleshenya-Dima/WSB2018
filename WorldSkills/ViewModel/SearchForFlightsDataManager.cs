@@ -270,8 +270,6 @@ namespace WorldSkills.ViewModel
         }
 
 
-
-
         public float TotalAmount
         {
             get => _totalAmount;
@@ -407,7 +405,7 @@ namespace WorldSkills.ViewModel
             if (obj is Tickets tickets)
             {
                 tickets.UserID = DefaultUserMainMenu.User.ID;
-                if (NewTickets.Count <= CountTicket)
+                if (NewTickets.Count < CountTicket)
                 {
                     foreach (var Tickets in AllCountry)
                     {
@@ -521,6 +519,7 @@ namespace WorldSkills.ViewModel
             GenerationCode = DataProtection.GenerationNumber();
             foreach (Tickets ticket in NewTickets)
             {
+                ticket.Confirmed = true;
                 ticket.BookingReference = GenerationCode;
                 WorkWithDatabase.SetSqlCommand($"INSERT INTO [Tickets] (UserID, ScheduleID, CabinTypeID, Firstname, Lastname, Email, Phone, PassportNumber, PassportCountryID, BookingReference, Confirmed) VALUES ({ticket.UserID}, {ticket.ScheduleID}, {ticket.CabinTypeID + 1}, '{ticket.Firstname}', '{ticket.Lastname}', '{ticket.Email}', '{ticket.Phone}', '{ticket.PassportNumber}', {ticket.PassportCountryID}, '{ticket.BookingReference}', '{ticket.Confirmed}' )");
                 WorkWithDatabase.SqlCommand.ExecuteNonQuery();
