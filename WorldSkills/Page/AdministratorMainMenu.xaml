@@ -17,6 +17,7 @@
         <ToolBar Height="29" VerticalAlignment="Top" Grid.ColumnSpan="2">
             <Button Content ="Add user" Click="AddUserButtonClick"/>
             <Button Content="Manage Flight Schedules" Click="ManageFlightSchedules"/>
+            <Button Content="Get Information about day" Click="GetInformationAboutDayButtonClick"/>
             <Button Content ="Exit" Click ="ExitButtonClick"/>
         </ToolBar>
         <Label Content = "Office: " Margin="20,45,360,381"/>

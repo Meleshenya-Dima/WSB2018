@@ -1,0 +1,27 @@
+﻿<Window x:Class="WorldSkills.Page.GetInformationAdmin"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WorldSkills.Page" xmlns:viewmodel="clr-namespace:WorldSkills.ViewModel" d:DataContext="{d:DesignInstance Type=viewmodel:PurchaseAmenitiesDataManager}"
+        mc:Ignorable="d"
+        Title="GetInformationAdmin" Height="308" Width="678">
+    <Grid>
+        <Label Content="Введите дату полета:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="FlightIDString" HorizontalAlignment="Left" Margin="16,41,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="151" Height="22"/>
+        <Button Content="Ввести" Background="White" HorizontalAlignment="Left" Margin="16,72,0,0" VerticalAlignment="Top" Command="{Binding GetInformationAboutDay}" CommandParameter="{Binding ElementName = FlightIDString, Path=Text}"/>
+        <ListView Margin="16,119,10,28" ItemsSource="{Binding AircraftsDateAmenities}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn 
+                        DisplayMemberBinding = "{Binding Path = NameAmemities}">Name Amemities
+                    </GridViewColumn>
+                    <GridViewColumn 
+                        DisplayMemberBinding = "{Binding Path = CountAmenities}">Count Amenities
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+    </Grid>
+</Window>

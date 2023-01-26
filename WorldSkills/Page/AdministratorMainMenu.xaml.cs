@@ -37,5 +37,11 @@ namespace WorldSkills.Page
             var newForm = new AddUserPage(_viewModelDataManager);
             newForm.ShowDialog();
         }
+
+        private void GetInformationAboutDayButtonClick(object sender, RoutedEventArgs e)
+        {
+            var newform = new GetInformationAdmin();
+            newform.ShowDialog();
+        }
     }
 }

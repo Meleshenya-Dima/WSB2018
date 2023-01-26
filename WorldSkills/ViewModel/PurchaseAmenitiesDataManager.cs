@@ -1,17 +1,55 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data.SqlClient;
 using System.Runtime.CompilerServices;
+using System.Windows;
 using WorldSkills.Model;
 
 namespace WorldSkills.ViewModel
 {
     class PurchaseAmenitiesDataManager : INotifyPropertyChanged
     {
-
-        public PurchaseAmenitiesDataManager()
+        private int _countSelectedItems = 0;
+        public int CountSelectedItems
         {
-            
+            get
+            {
+                return _countSelectedItems;
+            }
+            set
+            {
+                _countSelectedItems = value;
+                OnPropertyChanged("CountSelectedItems");
+            }
+        }
+
+        private float _dutiesAndTaxesSelectedItems = 0;
+        public float DutiesAndTaxesSelectedItems
+        {
+            get
+            {
+                return _dutiesAndTaxesSelectedItems;
+            }
+            set
+            {
+                _dutiesAndTaxesSelectedItems = value;
+                OnPropertyChanged("DutiesAndTaxesSelectedItems");
+            }
+        }
+
+        private float _totalPaybleSelectedItems = 0;
+        public float TotalPaybleSelectedItems
+        {
+            get
+            {
+                return _totalPaybleSelectedItems;
+            }
+            set
+            {
+                _totalPaybleSelectedItems = value;
+                OnPropertyChanged("TotalPaybleSelectedItems");
+            }
         }
 
         private Tickets _selectedTicket;
@@ -25,6 +63,20 @@ namespace WorldSkills.ViewModel
             {
                 _selectedTicket = value;
                 OnPropertyChanged("SelectedTicket");
+            }
+        }
+
+        private ObservableCollection<AircraftsDateAmenities> _aircraftsDateAmenities;
+        public ObservableCollection<AircraftsDateAmenities> AircraftsDateAmenities
+        {
+            get
+            {
+                return _aircraftsDateAmenities;
+            }
+            set
+            {
+                _aircraftsDateAmenities = value;
+                OnPropertyChanged("AircraftsDateAmenities");
             }
         }
 
@@ -43,7 +95,19 @@ namespace WorldSkills.ViewModel
                 OnPropertyChanged("SelectedTicket");
             }
         }
-
+        private Amenities _selectedAmenities;
+        public Amenities SelectedAmenities
+        {
+            get
+            {
+                return _selectedAmenities;
+            }
+            set
+            {
+                _selectedAmenities = value;
+                OnPropertyChanged("SelectedAmenities");
+            }
+        }
         public ObservableCollection<Amenities> GetAmenities()
         {
             ObservableCollection<Amenities> amenities = new ObservableCollection<Amenities>();
@@ -54,7 +118,60 @@ namespace WorldSkills.ViewModel
                 amenities.Add(new Amenities { ID = int.Parse(reader.GetValue(0).ToString()), Service = reader.GetValue(1).ToString(), Price = float.Parse(reader.GetValue(2).ToString()), Take = false });
             }
             reader.Close();
-            return amenities;
+            AmenitiesTickets = TakeAmentiesTickets();
+
+            for (int i = 0; i < amenities.Count; i++)
+            {
+                if (amenities[i].Price == 0f)
+                {
+                    amenities[i].Take = true;
+                }
+            }
+            if (AmenitiesTickets.Count == 0)
+            {
+                return amenities;
+            }
+            else
+            {
+                for (int i = 0; i < AmenitiesTickets.Count; i++)
+                {
+                    for (int j = 0; j < amenities.Count; j++)
+                    {
+                        if (amenities[j].ID == AmenitiesTickets[i].AmenityID)
+                        {
+                            amenities[j].Take = true;
+                        }
+                    }
+                }
+                return amenities;
+            }
+        }
+        public ObservableCollection<AmenitiesTickets> TakeAmentiesTickets()
+        {
+            int ticketId = SelectedTicket.ID;
+            ObservableCollection<AmenitiesTickets> amenitiesTickets = new ObservableCollection<AmenitiesTickets>();
+            WorkWithDatabase.SetSqlCommand($"SELECT * FROM [AmenitiesTickets] WHERE TicketID = {ticketId}");
+            SqlDataReader reader = WorkWithDatabase.SqlCommand.ExecuteReader();
+            while (reader.Read())
+            {
+                amenitiesTickets.Add(new AmenitiesTickets { AmenityID = int.Parse(reader.GetValue(0).ToString()), TicketID = int.Parse(reader.GetValue(1).ToString()), Money = float.Parse(reader.GetValue(2).ToString()) });
+            }
+            reader.Close();
+            return amenitiesTickets;
+        }
+
+        private ObservableCollection<AmenitiesTickets> _amenitiesTickets;
+        public ObservableCollection<AmenitiesTickets> AmenitiesTickets
+        {
+            get
+            {
+                return _amenitiesTickets;
+            }
+            set
+            {
+                _amenitiesTickets = value;
+                OnPropertyChanged("AmenitiesTickets");
+            }
         }
 
         private ObservableCollection<Amenities> _allAmenities;
@@ -96,7 +213,6 @@ namespace WorldSkills.ViewModel
             }
         }
 
-
         private Command _selectTickets;
         public Command SelectTickets => _selectTickets ??= new Command(obj =>
         {
@@ -123,9 +239,118 @@ namespace WorldSkills.ViewModel
             if (obj is Tickets ticket)
             {
                 AllAmenities = GetAmenities();
+                UpdateInformation();
             }
         });
 
+        public void UpdateInformation()
+        {
+            for (int i = 0; i < AllAmenities.Count; i++)
+            {
+                if (AllAmenities[i].Take)
+                {
+                    CountSelectedItems += 1;
+                    DutiesAndTaxesSelectedItems += AllAmenities[i].Price * 0.03f;
+                    TotalPaybleSelectedItems += AllAmenities[i].Price;
+                }
+            }
+
+        }
+
+        private Command _updateBuyAmenties;
+        public Command UpdateBuyAmenties => _updateBuyAmenties ??= new Command(obj =>
+        {
+            if (obj is ObservableCollection<Amenities> amenties)
+            {
+                for (int i = 0; i < amenties.Count; i++)
+                {
+                    if (amenties[i].Take && amenties[i].Price != 0)
+                    {
+                        bool isAdd = false;
+                        for (int j = 0; j < AmenitiesTickets.Count; j++)
+                        {
+                            if (AmenitiesTickets[j].AmenityID == amenties[i].ID)
+                            {
+                                isAdd = true;
+                            }
+                        }
+                        if (!isAdd)
+                        {
+                            WorkWithDatabase.SqlCommand.CommandText = $"INSERT INTO AmenitiesTickets (AmenityID, TicketID, Price) VALUES ({amenties[i].ID}, {SelectedTicket.ID}, {amenties[i].Price})";
+                            int x = WorkWithDatabase.SqlCommand.ExecuteNonQuery();
+                            isAdd = false;
+                        }
+                    }
+                    else
+                    {
+                        for (int j = 0; j < AmenitiesTickets.Count; j++)
+                        {
+                            if (AmenitiesTickets[j].AmenityID == amenties[i].ID)
+                            {
+                                WorkWithDatabase.SqlCommand.CommandText = $"DELETE AmenitiesTickets WHERE AmenityID = {amenties[i].ID} AND TicketID = {SelectedTicket.ID}";
+                                int x = WorkWithDatabase.SqlCommand.ExecuteNonQuery();
+                            }
+                        }
+                    }
+                }
+                MessageBox.Show("Информация изменена");
+                AmenitiesTickets = TakeAmentiesTickets();
+                UpdateInformation();
+            }
+        });
+
+        private Command _getInformationAboutDay;
+
+        private ObservableCollection<Amenities> TakeAllAmenities()
+        {
+            ObservableCollection<Amenities> amenities = new ObservableCollection<Amenities>();
+            WorkWithDatabase.SetSqlCommand($"SELECT * FROM [Amenities]");
+            SqlDataReader reader = WorkWithDatabase.SqlCommand.ExecuteReader();
+            while (reader.Read())
+            {
+                amenities.Add(new Amenities { ID = int.Parse(reader.GetValue(0).ToString()), Service = reader.GetValue(1).ToString(), Price = float.Parse(reader.GetValue(2).ToString()), Take = false });
+            }
+            reader.Close();
+            return amenities;
+        }
+
+        public Command GetInformationAboutDay => _getInformationAboutDay ??= new Command(obj =>
+        {
+            if (obj is string flightID)
+            {
+                AllAmenities = TakeAllAmenities();
+                ObservableCollection<AircraftsDateAmenities> amenities = new ObservableCollection<AircraftsDateAmenities>();
+                for (int i = 0; i < AllAmenities.Count; i++)
+                {
+                    amenities.Add(new AircraftsDateAmenities { ID = AllAmenities[i].ID, NameAmemities = AllAmenities[i].Service });
+                }
+                WorkWithDatabase.SqlCommand.CommandText = $"SELECT ID FROM Tickets WHERE ScheduleID = {flightID}";
+                SqlDataReader sqlDataReader = WorkWithDatabase.SqlCommand.ExecuteReader();
+                List<int> countIDTickets = new List<int>();
+                while (sqlDataReader.Read())
+                {
+                    countIDTickets.Add(int.Parse(sqlDataReader.GetValue(0).ToString()));
+                }
+                sqlDataReader.Close();
+                for (int i = 0; i < countIDTickets.Count; i++)
+                {
+                    WorkWithDatabase.SqlCommand.CommandText = $"SELECT AmenityID FROM AmenitiesTickets WHERE TicketID = {countIDTickets[i]}";
+                    sqlDataReader = WorkWithDatabase.SqlCommand.ExecuteReader();
+                    while (sqlDataReader.Read())
+                    {
+                        foreach (var amen in amenities)
+                        {
+                            if (amen.ID == int.Parse(sqlDataReader.GetValue(0).ToString()))
+                            {
+                                amen.CountAmenities++;
+                            }
+                        }
+                    }
+                    sqlDataReader.Close();
+                }
+                AircraftsDateAmenities = amenities;
+            }
+        });
 
         #region PropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;

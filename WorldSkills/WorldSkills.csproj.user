@@ -28,6 +28,9 @@
     <Compile Update="Page\EditRolePage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Page\GetInformationAdmin.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Page\ManageFlight.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -64,6 +67,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Page\EditRolePage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Page\GetInformationAdmin.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Page\ManageFlight.xaml">

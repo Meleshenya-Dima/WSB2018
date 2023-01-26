@@ -8,6 +8,7 @@ namespace WorldSkills.ViewModel
 {
     class Amenities
     {
+
         public int ID { get; set; }
 
         public string Service { get; set; }

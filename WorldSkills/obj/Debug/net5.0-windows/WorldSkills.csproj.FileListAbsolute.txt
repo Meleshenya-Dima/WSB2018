@@ -50,3 +50,5 @@ C:\Users\meles\Desktop\WorldSkills\WorldSkills\obj\Debug\net5.0-windows\WorldSki
 C:\Users\meles\Desktop\WorldSkills\WorldSkills\obj\Debug\net5.0-windows\WorldSkills.csproj.CopyComplete
 C:\Users\meles\Desktop\WorldSkills\WorldSkills\obj\Debug\net5.0-windows\WorldSkills.genruntimeconfig.cache
 C:\Users\meles\Desktop\WorldSkills\WorldSkills\obj\Debug\net5.0-windows\WorldSkills.csproj.AssemblyReference.cache
+C:\Users\meles\Desktop\WorldSkills\WorldSkills\obj\Debug\net5.0-windows\Page\GetInformationAdmin.g.cs
+C:\Users\meles\Desktop\WorldSkills\WorldSkills\obj\Debug\net5.0-windows\Page\GetInformationAdmin.baml
